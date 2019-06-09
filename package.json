@@ -1,0 +1,57 @@
+{
+  "name": "@xskytech/koa-api",
+  "version": "1.0.1",
+  "description": "Flexible Koa API",
+  "main": "./index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon .",
+    "start": "node .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "validate": "npm run lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run validate",
+      "pre-push": "npm run validate"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:xskytech/koa-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xskytech/koa-api/issues"
+  },
+  "homepage": "https://github.com/xskytech/koa-api#readme",
+  "keywords": [
+    "api",
+    "boilerplate",
+    "koa",
+    "rest",
+    "xsky",
+    "xskytech"
+  ],
+  "author": {
+    "name": "Narek Keryan",
+    "email": "narek.keryan@gmail.com",
+    "url": "http://nkgdev.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@koa/cors": "^3.0.0",
+    "dotenv": "^8.0.0",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-respond": "^2.1.0",
+    "koa-router": "^7.4.0",
+    "log4js": "^4.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "husky": "^2.3.0",
+    "nodemon": "^1.19.0"
+  }
+}

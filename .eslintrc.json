@@ -1,0 +1,48 @@
+{
+  "env": {
+    "node": true,
+    "commonjs": true,
+    "es6": true,
+    "mocha": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-async-promise-executor": ["error"],
+    "no-await-in-loop": ["error"],
+    "no-extra-parens": ["error"],
+    "no-misleading-character-class": ["error"],
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-template-curly-in-string": ["error"],
+    "no-underscore-dangle": ["error"],
+    "no-plusplus": ["error", {
+      "allowForLoopAfterthoughts": true
+    }],
+    "require-atomic-updates": ["error"],
+    "accessor-pairs": ["error"],
+    "class-methods-use-this": ["error"],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "import/order": ["error", {
+      "groups": ["builtin", "external", "sibling", "parent", "internal", "index"],
+      "newlines-between": "always"
+    }],
+    "linebreak-style": ["error", "unix"],
+    "comma-dangle": ["error", "never"],
+    "require-jsdoc": ["error", {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true,
+        "ArrowFunctionExpression": true,
+        "FunctionExpression": true
+      }
+    }],
+    "valid-jsdoc": ["error"]
+  }
+}
