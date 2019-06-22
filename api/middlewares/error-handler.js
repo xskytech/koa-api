@@ -1,6 +1,6 @@
-const logger = require('log4js').getLogger('./middlewares/errorHandler.js');
+const logger = require('log4js').getLogger('./middlewares/error-handler.js');
 
-const ErrorMessages = require('../constants/ErrorMessages');
+const ErrorMessages = require('../../constants/errors');
 
 module.exports = () => async (ctx, next) => {
   try {

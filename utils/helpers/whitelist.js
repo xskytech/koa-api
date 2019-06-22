@@ -1,5 +1,7 @@
+const config = require('../../config');
+
 module.exports = (ctx) => {
   const { origin } = ctx.headers;
-  const whitelist = process.env.WHITELIST ? process.env.WHITELIST.split(',') : null;
+  const whitelist = config.whitelist ? config.whitelist.split(',') : null;
   return whitelist && whitelist.includes(origin) ? origin : false;
 };

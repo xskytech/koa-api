@@ -3,16 +3,15 @@ const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
 const respond = require('koa-respond');
 const log4js = require('log4js');
-require('dotenv').config();
 
-const whitelist = require('./helpers/whitelist');
-const errorHandler = require('./middlewares/errorHandler');
-const v1Routes = require('./routes/v1');
+const errorHandler = require('./api/middlewares/error-handler');
+const v1Routes = require('./api/routes/v1');
+const whitelist = require('./utils/helpers/whitelist');
+const config = require('./config');
 
 const app = new Koa();
 const logger = log4js.getLogger('./index.js');
-const loggerLevel = process.env.LOGGER_LEVEL || 'debug';
-const port = process.env.PORT || 4000;
+const { port, loggerLevel } = config;
 
 log4js.configure({
   appenders: { consoleLog: { type: 'console' } },
