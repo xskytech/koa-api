@@ -14,5 +14,7 @@ module.exports = {
     database: process.env.DB_NAME || 'koa-api',
     host: process.env.DB_HOST || '127.0.0.1',
     dialect: 'postgres'
-  }
+  },
+
+  jwtSecret: process.env.JWT_SECRET || 'E+N*H~y%K3BJH8B"'
 };

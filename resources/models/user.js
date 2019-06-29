@@ -1,8 +1,10 @@
-/* eslint-disable require-jsdoc */
+/* eslint-disable require-jsdoc, func-names */
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const ErrorMessages = require('../../constants/errors').VALIDATION;
+const config = require('../../config');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -45,6 +47,12 @@ module.exports = (sequelize, DataTypes) => {
     sex: DataTypes.BOOLEAN,
     dob: DataTypes.DATE
   }, {
+    defaultScope: {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      }
+    },
+
     hooks: {
       beforeSave: async (model) => {
         if (model.isNewRecord || model.changed('password')) {
@@ -56,6 +64,25 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  User.prototype.authorize = function () {
+    return {
+      type: 'JWT',
+      accessToken: jwt.sign(
+        {
+          id: this.id
+        },
+        config.jwtSecret,
+        {
+          expiresIn: '4h'
+        }
+      )
+    };
+  };
+
+  User.prototype.comparePassword = function (password) {
+    return bcrypt.compare(password, this.password);
+  };
 
   return User;
 };
