@@ -21,7 +21,7 @@ log4js.configure({
 app.use(cors({ origin: whitelist }));
 app.use(bodyParser());
 app.use(respond({
-  statusMethods: { unprocessableEntity: 422 }
+  statusMethods: { accepted: 202, unprocessableEntity: 422 }
 }));
 app.use(errorHandler());
 app.use(v1Routes.routes());

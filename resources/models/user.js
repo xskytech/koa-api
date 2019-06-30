@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc, func-names */
 
+const { omit } = require('lodash');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -65,7 +66,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  User.prototype.authorize = function () {
+  User.prototype.toJSON = function () {
+    const model = this.get();
+    const hiddenFields = ['password', 'createdAt', 'updatedAt'];
+
+    return omit(model, hiddenFields);
+  };
+
+  User.prototype.authenticate = function () {
     return {
       type: 'JWT',
       accessToken: jwt.sign(
