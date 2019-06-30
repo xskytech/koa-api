@@ -1,6 +1,6 @@
 {
   "name": "@xskytech/koa-api",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Flexible Koa API",
   "main": "./index.js",
   "scripts": {
