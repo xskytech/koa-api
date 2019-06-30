@@ -60,6 +60,20 @@ npm run lint:fix
 npm run validate
 ```
 
+### Migrate
+
+**Run migrations**
+
+```bash
+npm run db:migrate
+```
+
+**Drop DB**
+
+```bash
+npm run db:drop
+```
+
 ### Run
 
 **Run in development**
