@@ -19,6 +19,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      accessTokenSalt: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      refreshToken: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       sex: {
         type: Sequelize.BOOLEAN
       },
