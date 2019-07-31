@@ -11,7 +11,6 @@ module.exports = () => async (ctx, next) => {
     logger.error(error.message || error);
 
     const sequelizeErrorNames = [
-      'SequelizeDatabaseError', // db not null error
       'SequelizeUniqueConstraintError', // db unique error
       'SequelizeValidationError' // model validation error
     ];

@@ -1,5 +1,8 @@
 /* eslint-disable require-jsdoc, func-names */
 
+const { randomBytes } = require('crypto');
+const { promisify } = require('util');
+
 const { omit } = require('lodash');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -45,15 +48,11 @@ module.exports = (sequelize, DataTypes) => {
         len: { args: [6], msg: ErrorMessages.LENGTH }
       }
     },
+    accessTokenSalt: DataTypes.STRING,
+    refreshToken: DataTypes.STRING,
     sex: DataTypes.BOOLEAN,
     dob: DataTypes.DATE
   }, {
-    defaultScope: {
-      attributes: {
-        exclude: ['createdAt', 'updatedAt']
-      }
-    },
-
     hooks: {
       beforeSave: async (model) => {
         if (model.isNewRecord || model.changed('password')) {
@@ -61,6 +60,9 @@ module.exports = (sequelize, DataTypes) => {
             const password = await bcrypt.hash(model.password, 10);
             model.setDataValue('password', password);
           }
+
+          model.setDataValue('accessTokenSalt', (await promisify(randomBytes)(32)).toString('hex'));
+          await model.updateRefreshToken();
         }
       }
     }
@@ -68,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.toJSON = function () {
     const model = this.get();
-    const hiddenFields = ['password', 'createdAt', 'updatedAt'];
+    const hiddenFields = ['password', 'accessTokenSalt', 'refreshToken'];
 
     return omit(model, hiddenFields);
   };
@@ -78,14 +80,20 @@ module.exports = (sequelize, DataTypes) => {
       type: 'JWT',
       accessToken: jwt.sign(
         {
-          id: this.id
+          id: this.id,
+          accessTokenSalt: this.accessTokenSalt,
+          refreshToken: this.refreshToken
         },
         config.jwtSecret,
         {
-          expiresIn: '4h'
+          expiresIn: '4m'
         }
       )
     };
+  };
+
+  User.prototype.updateRefreshToken = async function () {
+    this.setDataValue('refreshToken', (await promisify(randomBytes)(32)).toString('hex'));
   };
 
   User.prototype.comparePassword = function (password) {
