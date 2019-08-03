@@ -39,14 +39,12 @@ module.exports = () => async (ctx, next) => {
       }
 
       return ctx.unprocessableEntity({
-        success: false,
         message: ErrorMessages.UNPROCESSABLE_ENTITY,
         errors
       });
     }
 
     return ctx.internalServerError({
-      success: false,
       message: ErrorMessages.INTERNAL_SERVER_ERROR
     });
   }

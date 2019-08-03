@@ -10,10 +10,10 @@ class UsersController extends BaseController {
     const users = await User.findAll();
 
     if (isEmpty(users)) {
-      return ctx.notFound({ success: false, message: ErrorMessages.NOT_FOUND });
+      return ctx.notFound({ message: ErrorMessages.NOT_FOUND });
     }
 
-    return ctx.ok({ success: true, payload: { users } });
+    return ctx.ok({ users });
   }
 
   static async getById(ctx) {
@@ -22,16 +22,16 @@ class UsersController extends BaseController {
     const user = await User.findOne({ where: { id } });
 
     if (isEmpty(user)) {
-      return ctx.notFound({ success: false, message: ErrorMessages.NOT_FOUND });
+      return ctx.notFound({ message: ErrorMessages.NOT_FOUND });
     }
 
-    return ctx.ok({ success: true, payload: { user } });
+    return ctx.ok({ user });
   }
 
   static async create(ctx) {
     const user = await User.create(pick(ctx.request.body, ['fullName', 'email', 'password']));
 
-    ctx.created({ success: true, payload: { user, auth: user.authenticate() } });
+    ctx.created({ user, auth: user.authenticate() });
   }
 
   static async signIn(ctx) {
@@ -40,10 +40,10 @@ class UsersController extends BaseController {
     const user = await User.findOne({ where: { email: email.trim().toLowerCase() } });
 
     if (isEmpty(user) || !await user.comparePassword(password)) {
-      return ctx.unauthorized({ success: false, message: ErrorMessages.INVALID_CREDENTIALS });
+      return ctx.unauthorized({ message: ErrorMessages.INVALID_CREDENTIALS });
     }
 
-    return ctx.ok({ success: true, payload: { user, auth: user.authenticate() } });
+    return ctx.ok({ user, auth: user.authenticate() });
   }
 
   static async update(ctx) {
@@ -52,19 +52,19 @@ class UsersController extends BaseController {
     const { password } = ctx.request.body;
 
     if (parseInt(id, 10) !== userId) {
-      return ctx.forbidden({ success: false, message: ErrorMessages.FORBIDDEN });
+      return ctx.forbidden({ message: ErrorMessages.FORBIDDEN });
     }
 
     const user = await User.findOne({ where: { id } });
 
     if (isEmpty(user)) {
-      return ctx.notFound({ success: false, message: ErrorMessages.NOT_FOUND });
+      return ctx.notFound({ message: ErrorMessages.NOT_FOUND });
     }
 
     user.password = password;
     await user.save();
 
-    return ctx.accepted({ success: true, payload: { user } });
+    return ctx.accepted({ user });
   }
 
   static async delete(ctx) {
@@ -72,12 +72,16 @@ class UsersController extends BaseController {
     const { id: userId } = ctx.state.user;
 
     if (parseInt(id, 10) !== userId) {
-      return ctx.forbidden({ success: false, message: ErrorMessages.FORBIDDEN });
+      return ctx.forbidden({ message: ErrorMessages.FORBIDDEN });
     }
 
     const deleted = await User.destroy({ where: { id } });
 
-    return ctx.accepted({ success: Boolean(deleted) });
+    if (!deleted) {
+      return ctx.conflict({ message: ErrorMessages.CONFLICT });
+    }
+
+    return ctx.accepted({});
   }
 }
 
