@@ -6,6 +6,7 @@ const authorization = require('../../middlewares/authorization');
 const router = new Router({ prefix: '/users' });
 
 router.get('/', authorization, UsersController.getAll);
+router.get('/activate', UsersController.activate);
 router.get('/:id', authorization, UsersController.getById);
 
 router.post('/', UsersController.create);

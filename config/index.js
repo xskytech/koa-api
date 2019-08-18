@@ -16,5 +16,14 @@ module.exports = {
     dialect: 'postgres'
   },
 
-  jwtSecret: process.env.JWT_SECRET || 'E+N*H~y%K3BJH8B"'
+  jwtSecret: process.env.JWT_SECRET || 'E+N*H~y%K3BJH8B"',
+
+  mailer: {
+    sendgridApiKey: process.env.SENDGRID_API_KEY || '',
+
+    emails: {
+      admin: 'XSKYTECH Admin <admin@example.com>',
+      support: 'XSKYTECH Support <support@example.com>'
+    }
+  }
 };

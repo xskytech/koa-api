@@ -7,10 +7,12 @@
     "dev": "NODE_ENV=development nodemon .",
     "start": "node .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint-fix": "eslint . --fix",
     "validate": "npm run lint",
-    "db:migrate": "sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
-    "db:drop": "sequelize db:drop"
+    "db-create": "sequelize db:create",
+    "db-migrate": "sequelize db:migrate",
+    "db-seed": "sequelize db:seed:all",
+    "db-drop": "sequelize db:drop"
   },
   "husky": {
     "hooks": {
@@ -42,8 +44,10 @@
   "license": "MIT",
   "dependencies": {
     "@koa/cors": "^3.0.0",
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.6",
     "dotenv": "^8.0.0",
+    "ejs": "^2.6.2",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",

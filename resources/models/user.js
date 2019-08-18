@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const ErrorMessages = require('../../constants/errors').VALIDATION;
+const Statuses = require('../../constants/statuses');
 const config = require('../../config');
 
 module.exports = (sequelize, DataTypes) => {
@@ -51,7 +52,11 @@ module.exports = (sequelize, DataTypes) => {
     accessTokenSalt: DataTypes.STRING,
     refreshToken: DataTypes.STRING,
     sex: DataTypes.BOOLEAN,
-    dob: DataTypes.DATE
+    dob: DataTypes.DATE,
+    status: {
+      type: DataTypes.SMALLINT,
+      defaultValue: Statuses.PENDING
+    }
   }, {
     hooks: {
       beforeSave: async (model) => {
@@ -67,6 +72,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.Token, { as: 'tokens', foreignKey: 'userId' });
+  };
 
   User.prototype.toJSON = function () {
     const model = this.get();

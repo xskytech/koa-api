@@ -1,9 +1,15 @@
+const { randomBytes } = require('crypto');
+const { promisify } = require('util');
+
 const { isEmpty, pick } = require('lodash');
 
 const BaseController = require('./BaseController');
 
-const { User } = require('../../resources/models');
+const { sequelize, User, Token } = require('../../resources/models');
+const Mailer = require('../../services/Mailer');
 const ErrorMessages = require('../../constants/errors');
+const Statuses = require('../../constants/statuses');
+const Tokens = require('../../constants/tokens');
 
 class UsersController extends BaseController {
   static async getAll(ctx) {
@@ -29,9 +35,37 @@ class UsersController extends BaseController {
   }
 
   static async create(ctx) {
-    const user = await User.create(pick(ctx.request.body, ['fullName', 'email', 'password']));
+    const activationToken = (await promisify(randomBytes)(32)).toString('hex');
 
-    ctx.created({ user, auth: user.authenticate() });
+    const user = await User.create(
+      {
+        ...pick(ctx.request.body, ['fullName', 'email', 'password']),
+        tokens: [{
+          type: Tokens.ACTIVATION,
+          value: activationToken
+        }]
+      },
+      {
+        include: [{
+          model: Token,
+          as: 'tokens'
+        }]
+      }
+    );
+
+    const options = {
+      to: user.email,
+      subject: 'Welcome to XSKYTECH koa-api.',
+      template: 'sign-up',
+      params: {
+        // TODO: generate activation url in front
+        confirmationUrl: `http://localhost:4000/v1/users/activate?token=${activationToken}`
+      }
+    };
+
+    await Mailer.send(options);
+
+    ctx.created({ user });
   }
 
   static async signIn(ctx) {
@@ -41,6 +75,10 @@ class UsersController extends BaseController {
 
     if (isEmpty(user) || !await user.comparePassword(password)) {
       return ctx.unauthorized({ message: ErrorMessages.INVALID_CREDENTIALS });
+    }
+
+    if (user.status !== Statuses.ACTIVE) {
+      return ctx.forbidden({ message: Object.keys(Statuses)[user.status - 1] });
     }
 
     return ctx.ok({ user, auth: user.authenticate() });
@@ -78,6 +116,45 @@ class UsersController extends BaseController {
     const deleted = await User.destroy({ where: { id } });
 
     if (!deleted) {
+      return ctx.conflict({ message: ErrorMessages.CONFLICT });
+    }
+
+    return ctx.accepted({});
+  }
+
+  static async activate(ctx) {
+    const { token: activationToken } = ctx.request.query;
+
+    const token = await Token.findOne({
+      where: {
+        type: Tokens.ACTIVATION,
+        value: activationToken
+      }
+    });
+
+    if (isEmpty(token)) {
+      return ctx.notFound({ message: ErrorMessages.NOT_FOUND });
+    }
+
+    const activated = await sequelize.transaction(async (transaction) => {
+      await User.update(
+        {
+          status: Statuses.ACTIVE
+        },
+        {
+          where: {
+            id: token.userId
+          },
+          transaction
+        }
+      );
+
+      const deleted = await token.destroy({ transaction });
+
+      return deleted;
+    });
+
+    if (!activated) {
       return ctx.conflict({ message: ErrorMessages.CONFLICT });
     }
 
