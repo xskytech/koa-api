@@ -33,6 +33,10 @@ module.exports = {
       dob: {
         type: Sequelize.DATE
       },
+      status: {
+        allowNull: false,
+        type: Sequelize.SMALLINT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

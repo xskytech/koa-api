@@ -30,7 +30,7 @@ module.exports = (ctx, next) => {
 
     if (error || isEmpty(user)) {
       ctx.state.user = null;
-      return ctx.unauthorized({ success: false, message: ErrorMessages.UNAUTHORIZED });
+      return ctx.unauthorized({ message: ErrorMessages.UNAUTHORIZED });
     }
 
     if (generateJwt) {
