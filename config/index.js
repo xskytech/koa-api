@@ -25,5 +25,15 @@ module.exports = {
       admin: 'XSKYTECH Admin <admin@example.com>',
       support: 'XSKYTECH Support <support@example.com>'
     }
+  },
+
+  social: {
+    facebook: {
+      clientId: process.env.FACEBOOK_CLIENT_ID || '',
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
+      redirectUrl: process.env.FACEBOOK_REDIRECT_URL || '',
+      accessTokenUrl: 'https://graph.facebook.com/v4.0/oauth/access_token',
+      profileUrl: 'https://graph.facebook.com/v4.0/me'
+    }
   }
 };

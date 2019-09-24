@@ -5,8 +5,11 @@ const { isEmpty, pick } = require('lodash');
 
 const BaseController = require('./BaseController');
 
-const { sequelize, User, Token } = require('../../resources/models');
+const {
+  sequelize, User, UserSocial, Token
+} = require('../../resources/models');
 const Mailer = require('../../services/Mailer');
+const Social = require('../../utils/Social');
 const ErrorMessages = require('../../constants/errors');
 const Statuses = require('../../constants/statuses');
 const Tokens = require('../../constants/tokens');
@@ -36,10 +39,12 @@ class UsersController extends BaseController {
 
   static async create(ctx) {
     const activationToken = (await promisify(randomBytes)(32)).toString('hex');
+    const { password = '' } = ctx.request.body;
 
     const user = await User.create(
       {
-        ...pick(ctx.request.body, ['fullName', 'email', 'password']),
+        ...pick(ctx.request.body, ['fullName', 'email']),
+        password,
         tokens: [{
           type: Tokens.ACTIVATION,
           value: activationToken
@@ -82,6 +87,20 @@ class UsersController extends BaseController {
     }
 
     return ctx.ok({ user, auth: user.authenticate() });
+  }
+
+  static async socialAuth(ctx) {
+    const { code } = ctx.request.body;
+
+    const socialData = await Social.getData({ code });
+    const user = await User.create(socialData, {
+      include: [{
+        model: UserSocial,
+        as: 'socials'
+      }]
+    });
+
+    ctx.ok({ user, auth: user.authenticate() });
   }
 
   static async update(ctx) {

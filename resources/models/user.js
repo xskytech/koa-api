@@ -42,13 +42,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
-        notNull: { msg: ErrorMessages.REQUIRED },
         notEmpty: { msg: ErrorMessages.REQUIRED },
         len: { args: [6], msg: ErrorMessages.LENGTH }
       }
     },
+    picture: DataTypes.STRING,
     accessTokenSalt: DataTypes.STRING,
     refreshToken: DataTypes.STRING,
     sex: DataTypes.BOOLEAN,
@@ -75,6 +74,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasMany(models.Token, { as: 'tokens', foreignKey: 'userId' });
+    User.hasMany(models.UserSocial, { as: 'socials', foreignKey: 'userId' });
   };
 
   User.prototype.toJSON = function () {

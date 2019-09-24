@@ -1,43 +1,31 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('UserSocials', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fullName: {
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
+      },
+      socialId: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      email: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
-      picture: {
-        type: Sequelize.STRING
-      },
-      accessTokenSalt: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      refreshToken: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      sex: {
-        type: Sequelize.BOOLEAN
-      },
-      dob: {
-        type: Sequelize.DATE
-      },
-      status: {
+      type: {
         allowNull: false,
         type: Sequelize.SMALLINT
+      },
+      url: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -48,10 +36,8 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-
-    await queryInterface.addIndex('Users', { unique: true, fields: ['email'] });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('UserSocials');
   }
 };
