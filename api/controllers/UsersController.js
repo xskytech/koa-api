@@ -90,9 +90,9 @@ class UsersController extends BaseController {
   }
 
   static async socialAuth(ctx) {
-    const { code } = ctx.request.body;
+    const { type, code } = ctx.request.body;
 
-    const socialData = await Social.getData({ code });
+    const socialData = await Social.getData({ type, code });
     const user = await User.create(socialData, {
       include: [{
         model: UserSocial,

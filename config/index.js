@@ -28,6 +28,13 @@ module.exports = {
   },
 
   social: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      redirectUrl: process.env.GOOGLE_REDIRECT_URL || '',
+      accessTokenUrl: 'https://oauth2.googleapis.com/token',
+      profileUrl: 'https://www.googleapis.com/oauth2/v1/userinfo'
+    },
     facebook: {
       clientId: process.env.FACEBOOK_CLIENT_ID || '',
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',

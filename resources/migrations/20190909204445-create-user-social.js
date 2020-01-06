@@ -24,7 +24,6 @@ module.exports = {
         type: Sequelize.SMALLINT
       },
       url: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
