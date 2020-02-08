@@ -93,12 +93,43 @@ class UsersController extends BaseController {
     const { type, code } = ctx.request.body;
 
     const socialData = await Social.getData({ type, code });
-    const user = await User.create(socialData, {
+    const { email, socials } = socialData;
+    const { socialId, type: socialType } = socials;
+
+    let user = await User.findOne({
+      where: { email },
       include: [{
         model: UserSocial,
         as: 'socials'
       }]
     });
+
+    if (isEmpty(user)) {
+      user = await User.create(socialData, {
+        include: [{
+          model: UserSocial,
+          as: 'socials'
+        }]
+      });
+    } else {
+      const userSocial = await UserSocial.findOrCreate({
+        where: {
+          userId: user.id,
+          socialId,
+          type: socialType
+        },
+        defaults: socials
+      });
+
+      if (isEmpty(user.socials.find(
+        s => s.socialId === userSocial.socialId && s.type === userSocial.type
+      ))) {
+        user.dataValues.socials = [
+          ...user.socials,
+          userSocial[0]
+        ];
+      }
+    }
 
     ctx.ok({ user, auth: user.authenticate() });
   }
