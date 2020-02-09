@@ -58,6 +58,8 @@ class UsersController extends BaseController {
       }
     );
 
+    user.dataValues.socials = [];
+
     const options = {
       to: user.email,
       subject: 'Welcome to XSKYTECH koa-api.',
@@ -96,13 +98,7 @@ class UsersController extends BaseController {
     const { email, socials } = socialData;
     const { socialId, type: socialType } = socials;
 
-    let user = await User.findOne({
-      where: { email },
-      include: [{
-        model: UserSocial,
-        as: 'socials'
-      }]
-    });
+    let user = await User.findOne({ where: { email } });
 
     if (isEmpty(user)) {
       user = await User.create(socialData, {
@@ -112,7 +108,7 @@ class UsersController extends BaseController {
         }]
       });
     } else {
-      const userSocial = await UserSocial.findOrCreate({
+      const [userSocial] = await UserSocial.findOrCreate({
         where: {
           userId: user.id,
           socialId,
@@ -126,7 +122,7 @@ class UsersController extends BaseController {
       ))) {
         user.dataValues.socials = [
           ...user.socials,
-          userSocial[0]
+          userSocial
         ];
       }
     }

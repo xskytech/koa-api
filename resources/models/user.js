@@ -57,6 +57,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: Statuses.PENDING
     }
   }, {
+    defaultScope: {
+      include: [{
+        model: sequelize.import('./usersocial'),
+        as: 'socials'
+      }]
+    },
+
     hooks: {
       beforeSave: async (model) => {
         if (model.isNewRecord || model.changed('password')) {
@@ -106,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.prototype.comparePassword = function (password) {
-    return bcrypt.compare(password, this.password);
+    return this.password && bcrypt.compare(password, this.password);
   };
 
   return User;
