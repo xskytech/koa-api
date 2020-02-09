@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Tokens', {
+    await queryInterface.createTable('UserSocials', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,12 +17,15 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      socialId: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       type: {
         allowNull: false,
         type: Sequelize.SMALLINT
       },
-      value: {
-        allowNull: false,
+      url: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -36,6 +39,6 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Tokens');
+    await queryInterface.dropTable('UserSocials');
   }
 };

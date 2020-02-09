@@ -5,8 +5,11 @@ const { isEmpty, pick } = require('lodash');
 
 const BaseController = require('./BaseController');
 
-const { sequelize, User, Token } = require('../../resources/models');
+const {
+  sequelize, User, UserSocial, Token
+} = require('../../resources/models');
 const Mailer = require('../../services/Mailer');
+const Social = require('../../utils/Social');
 const ErrorMessages = require('../../constants/errors');
 const Statuses = require('../../constants/statuses');
 const Tokens = require('../../constants/tokens');
@@ -36,10 +39,12 @@ class UsersController extends BaseController {
 
   static async create(ctx) {
     const activationToken = (await promisify(randomBytes)(32)).toString('hex');
+    const { password = '' } = ctx.request.body;
 
     const user = await User.create(
       {
-        ...pick(ctx.request.body, ['fullName', 'email', 'password']),
+        ...pick(ctx.request.body, ['fullName', 'email']),
+        password,
         tokens: [{
           type: Tokens.ACTIVATION,
           value: activationToken
@@ -52,6 +57,8 @@ class UsersController extends BaseController {
         }]
       }
     );
+
+    user.dataValues.socials = [];
 
     const options = {
       to: user.email,
@@ -82,6 +89,45 @@ class UsersController extends BaseController {
     }
 
     return ctx.ok({ user, auth: user.authenticate() });
+  }
+
+  static async socialAuth(ctx) {
+    const { type, code } = ctx.request.body;
+
+    const socialData = await Social.getData({ type, code });
+    const { email, socials } = socialData;
+    const { socialId, type: socialType } = socials;
+
+    let user = await User.findOne({ where: { email } });
+
+    if (isEmpty(user)) {
+      user = await User.create(socialData, {
+        include: [{
+          model: UserSocial,
+          as: 'socials'
+        }]
+      });
+    } else {
+      const [userSocial] = await UserSocial.findOrCreate({
+        where: {
+          userId: user.id,
+          socialId,
+          type: socialType
+        },
+        defaults: socials
+      });
+
+      if (isEmpty(user.socials.find(
+        s => s.socialId === userSocial.socialId && s.type === userSocial.type
+      ))) {
+        user.dataValues.socials = [
+          ...user.socials,
+          userSocial
+        ];
+      }
+    }
+
+    ctx.ok({ user, auth: user.authenticate() });
   }
 
   static async update(ctx) {

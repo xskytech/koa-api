@@ -42,13 +42,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
-        notNull: { msg: ErrorMessages.REQUIRED },
         notEmpty: { msg: ErrorMessages.REQUIRED },
         len: { args: [6], msg: ErrorMessages.LENGTH }
       }
     },
+    picture: DataTypes.STRING,
     accessTokenSalt: DataTypes.STRING,
     refreshToken: DataTypes.STRING,
     sex: DataTypes.BOOLEAN,
@@ -58,6 +57,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: Statuses.PENDING
     }
   }, {
+    defaultScope: {
+      include: [{
+        model: sequelize.import('./usersocial'),
+        as: 'socials'
+      }]
+    },
+
     hooks: {
       beforeSave: async (model) => {
         if (model.isNewRecord || model.changed('password')) {
@@ -75,6 +81,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasMany(models.Token, { as: 'tokens', foreignKey: 'userId' });
+    User.hasMany(models.UserSocial, { as: 'socials', foreignKey: 'userId' });
   };
 
   User.prototype.toJSON = function () {
@@ -106,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.prototype.comparePassword = function (password) {
-    return bcrypt.compare(password, this.password);
+    return this.password && bcrypt.compare(password, this.password);
   };
 
   return User;

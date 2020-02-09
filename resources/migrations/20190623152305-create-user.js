@@ -16,7 +16,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       password: {
-        allowNull: false,
+        type: Sequelize.STRING
+      },
+      picture: {
         type: Sequelize.STRING
       },
       accessTokenSalt: {

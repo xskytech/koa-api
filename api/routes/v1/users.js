@@ -11,6 +11,7 @@ router.get('/:id', authorization, UsersController.getById);
 
 router.post('/', UsersController.create);
 router.post('/sign-in', UsersController.signIn);
+router.post('/social-auth', UsersController.socialAuth);
 
 router.patch('/:id', authorization, UsersController.update);
 
