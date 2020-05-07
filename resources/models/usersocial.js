@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const UserSocial = sequelize.define('UserSocial', {
     socialId: DataTypes.STRING,
     type: DataTypes.SMALLINT,
-    url: DataTypes.STRING
+    url: DataTypes.STRING,
   }, {});
 
   UserSocial.associate = (models) => {

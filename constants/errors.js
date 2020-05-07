@@ -12,6 +12,6 @@ module.exports = {
     REQUIRED: 'REQUIRED',
     LENGTH: 'LENGTH',
     INVALID_EMAIL: 'INVALID_EMAIL',
-    UNIQUE: 'UNIQUE'
-  }
+    UNIQUE: 'UNIQUE',
+  },
 };

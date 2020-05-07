@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: ErrorMessages.REQUIRED },
         notEmpty: { msg: ErrorMessages.REQUIRED },
-        len: { args: [4, 32], msg: ErrorMessages.LENGTH }
+        len: { args: [4, 32], msg: ErrorMessages.LENGTH },
       },
       set(value) {
         this.setDataValue('fullName', value.trim());
-      }
+      },
     },
     email: {
       type: DataTypes.STRING,
@@ -31,21 +31,21 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: ErrorMessages.REQUIRED },
         notEmpty: { msg: ErrorMessages.REQUIRED },
-        isEmail: { msg: ErrorMessages.INVALID_EMAIL }
+        isEmail: { msg: ErrorMessages.INVALID_EMAIL },
       },
       unique: {
-        msg: ErrorMessages.UNIQUE
+        msg: ErrorMessages.UNIQUE,
       },
       set(value) {
         this.setDataValue('email', value.trim().toLowerCase());
-      }
+      },
     },
     password: {
       type: DataTypes.STRING,
       validate: {
         notEmpty: { msg: ErrorMessages.REQUIRED },
-        len: { args: [6], msg: ErrorMessages.LENGTH }
-      }
+        len: { args: [6], msg: ErrorMessages.LENGTH },
+      },
     },
     picture: DataTypes.STRING,
     accessTokenSalt: DataTypes.STRING,
@@ -54,14 +54,14 @@ module.exports = (sequelize, DataTypes) => {
     dob: DataTypes.DATE,
     status: {
       type: DataTypes.SMALLINT,
-      defaultValue: Statuses.PENDING
-    }
+      defaultValue: Statuses.PENDING,
+    },
   }, {
     defaultScope: {
       include: [{
         model: sequelize.import('./usersocial'),
-        as: 'socials'
-      }]
+        as: 'socials',
+      }],
     },
 
     hooks: {
@@ -75,8 +75,8 @@ module.exports = (sequelize, DataTypes) => {
           model.setDataValue('accessTokenSalt', (await promisify(randomBytes)(32)).toString('hex'));
           await model.updateRefreshToken();
         }
-      }
-    }
+      },
+    },
   });
 
   User.associate = (models) => {
@@ -98,13 +98,13 @@ module.exports = (sequelize, DataTypes) => {
         {
           id: this.id,
           accessTokenSalt: this.accessTokenSalt,
-          refreshToken: this.refreshToken
+          refreshToken: this.refreshToken,
         },
         config.jwtSecret,
         {
-          expiresIn: '4m'
+          expiresIn: '4m',
         }
-      )
+      ),
     };
   };
 

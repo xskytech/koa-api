@@ -1,3 +1,3 @@
 module.exports = {
-  ACTIVATION: 1
+  ACTIVATION: 1,
 };

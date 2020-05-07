@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Token = sequelize.define('Token', {
     type: DataTypes.SMALLINT,
-    value: DataTypes.STRING
+    value: DataTypes.STRING,
   }, {});
 
   Token.associate = (models) => {

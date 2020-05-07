@@ -3,5 +3,5 @@ module.exports = {
   PENDING: 2,
   FROZEN: 3,
   BLOCKED: 4,
-  DELETED: 5
+  DELETED: 5,
 };

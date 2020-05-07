@@ -3,16 +3,16 @@ const { promisify } = require('util');
 
 const { isEmpty, pick } = require('lodash');
 
-const BaseController = require('./BaseController');
-
 const {
-  sequelize, User, UserSocial, Token
+  sequelize, User, UserSocial, Token,
 } = require('../../resources/models');
 const Mailer = require('../../services/Mailer');
 const Social = require('../../utils/Social');
 const ErrorMessages = require('../../constants/errors');
 const Statuses = require('../../constants/statuses');
 const Tokens = require('../../constants/tokens');
+
+const BaseController = require('./BaseController');
 
 class UsersController extends BaseController {
   static async getAll(ctx) {
@@ -47,14 +47,14 @@ class UsersController extends BaseController {
         password,
         tokens: [{
           type: Tokens.ACTIVATION,
-          value: activationToken
-        }]
+          value: activationToken,
+        }],
       },
       {
         include: [{
           model: Token,
-          as: 'tokens'
-        }]
+          as: 'tokens',
+        }],
       }
     );
 
@@ -66,8 +66,8 @@ class UsersController extends BaseController {
       template: 'sign-up',
       params: {
         // TODO: generate activation url in front
-        confirmationUrl: `http://localhost:4000/v1/users/activate?token=${activationToken}`
-      }
+        confirmationUrl: `http://localhost:4000/v1/users/activate?token=${activationToken}`,
+      },
     };
 
     await Mailer.send(options);
@@ -104,17 +104,17 @@ class UsersController extends BaseController {
       user = await User.create(socialData, {
         include: [{
           model: UserSocial,
-          as: 'socials'
-        }]
+          as: 'socials',
+        }],
       });
     } else {
       const [userSocial] = await UserSocial.findOrCreate({
         where: {
           userId: user.id,
           socialId,
-          type: socialType
+          type: socialType,
         },
-        defaults: socials
+        defaults: socials,
       });
 
       if (isEmpty(user.socials.find(
@@ -122,7 +122,7 @@ class UsersController extends BaseController {
       ))) {
         user.dataValues.socials = [
           ...user.socials,
-          userSocial
+          userSocial,
         ];
       }
     }
@@ -174,8 +174,8 @@ class UsersController extends BaseController {
     const token = await Token.findOne({
       where: {
         type: Tokens.ACTIVATION,
-        value: activationToken
-      }
+        value: activationToken,
+      },
     });
 
     if (isEmpty(token)) {
@@ -185,13 +185,13 @@ class UsersController extends BaseController {
     const activated = await sequelize.transaction(async (transaction) => {
       await User.update(
         {
-          status: Statuses.ACTIVE
+          status: Statuses.ACTIVE,
         },
         {
           where: {
-            id: token.userId
+            id: token.userId,
           },
-          transaction
+          transaction,
         }
       );
 

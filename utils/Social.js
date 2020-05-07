@@ -1,10 +1,10 @@
 const request = require('request-promise-native');
 
-const capitalize = require('./helpers/capitalize');
-
 const Statuses = require('../constants/statuses');
 const Socials = require('../constants/socials');
 const { social: { facebook, google } } = require('../config');
+
+const capitalize = require('./helpers/capitalize');
 
 class Social {
   static async getData({ type, code }) {
@@ -15,13 +15,13 @@ class Social {
     return {
       ...rest,
       socials: { socialId, type: Socials[type.toUpperCase()], url },
-      status: Statuses.ACTIVE
+      status: Statuses.ACTIVE,
     };
   }
 
   static async getGoogleData(code) {
     const {
-      clientId, clientSecret, redirectUrl, accessTokenUrl, profileUrl
+      clientId, clientSecret, redirectUrl, accessTokenUrl, profileUrl,
     } = google;
 
     const { access_token: accessToken } = await request(accessTokenUrl, {
@@ -31,9 +31,9 @@ class Social {
         client_secret: clientSecret,
         redirect_uri: redirectUrl,
         code,
-        grant_type: 'authorization_code'
+        grant_type: 'authorization_code',
       },
-      json: true
+      json: true,
     });
 
     const profileApiUrl = `${profileUrl}?access_token=${accessToken}`;
@@ -43,13 +43,13 @@ class Social {
       fullName: profile.name,
       email: profile.email,
       picture: profile.picture,
-      socialId: profile.id
+      socialId: profile.id,
     };
   }
 
   static async getFacebookData(code) {
     const {
-      clientId, clientSecret, redirectUrl, accessTokenUrl, profileUrl
+      clientId, clientSecret, redirectUrl, accessTokenUrl, profileUrl,
     } = facebook;
 
     const accessTokenApiUrl = `${accessTokenUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&client_secret=${clientSecret}&code=${code}`;
@@ -63,7 +63,7 @@ class Social {
       email: profile.email,
       picture: profile.picture.data.url,
       socialId: profile.id,
-      url: profile.link
+      url: profile.link,
     };
   }
 }

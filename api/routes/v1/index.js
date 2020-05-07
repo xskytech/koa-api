@@ -1,8 +1,8 @@
 const Router = require('koa-router');
 
-const usersRoutes = require('./users');
-
 const BaseController = require('../../controllers/BaseController');
+
+const usersRoutes = require('./users');
 
 const router = new Router({ prefix: '/v1' });
 

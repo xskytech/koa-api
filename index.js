@@ -15,13 +15,13 @@ const { port, loggerLevel } = config;
 
 log4js.configure({
   appenders: { consoleLog: { type: 'console' } },
-  categories: { default: { appenders: ['consoleLog'], level: loggerLevel } }
+  categories: { default: { appenders: ['consoleLog'], level: loggerLevel } },
 });
 
 app.use(cors({ origin: whitelist }));
 app.use(bodyParser());
 app.use(respond({
-  statusMethods: { accepted: 202, conflict: 409, unprocessableEntity: 422 }
+  statusMethods: { accepted: 202, conflict: 409, unprocessableEntity: 422 },
 }));
 app.use(errorHandler());
 app.use(v1Routes.routes());

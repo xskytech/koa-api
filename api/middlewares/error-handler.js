@@ -12,7 +12,7 @@ module.exports = () => async (ctx, next) => {
 
     const sequelizeErrorNames = [
       'SequelizeUniqueConstraintError', // db unique error
-      'SequelizeValidationError' // model validation error
+      'SequelizeValidationError', // model validation error
     ];
 
     const errorsWithArguments = ['len'];
@@ -27,25 +27,25 @@ module.exports = () => async (ctx, next) => {
               field: eachError.path,
               message: eachError.message,
               args: errorsWithArguments.includes(eachError.validatorKey)
-                ? eachError.validatorArgs : undefined
+                ? eachError.validatorArgs : undefined,
             });
           }
         });
       } else {
         errors.push({
           field: error.original.column,
-          message: errorCodes[error.original.code].toUpperCase()
+          message: errorCodes[error.original.code].toUpperCase(),
         });
       }
 
       return ctx.unprocessableEntity({
         message: ErrorMessages.UNPROCESSABLE_ENTITY,
-        errors
+        errors,
       });
     }
 
     return ctx.internalServerError({
-      message: ErrorMessages.INTERNAL_SERVER_ERROR
+      message: ErrorMessages.INTERNAL_SERVER_ERROR,
     });
   }
 };

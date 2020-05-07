@@ -1,4 +1,4 @@
 module.exports = {
   GOOGLE: 1,
-  FACEBOOK: 2
+  FACEBOOK: 2,
 };

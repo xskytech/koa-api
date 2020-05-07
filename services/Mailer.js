@@ -7,13 +7,13 @@ sgMail.setApiKey(sendgridApiKey);
 
 class Mailer {
   static async send({
-    to, from = emails.support, subject, template, params
+    to, from = emails.support, subject, template, params,
   }) {
     return sgMail.send({
       to,
       from,
       subject,
-      html: await ejs.renderFile(`${__dirname}/../public/templates/${template}.ejs`, params)
+      html: await ejs.renderFile(`${__dirname}/../public/templates/${template}.ejs`, params),
     });
   }
 }
