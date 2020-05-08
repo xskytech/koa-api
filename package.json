@@ -4,17 +4,17 @@
   "description": "Flexible Koa API",
   "main": "./index.js",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon .",
+    "develop": "NODE_ENV=development nodemon .",
     "start": "node .",
     "lint": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "lint:fix": "eslint . --fix",
     "validate": "npm run lint",
-    "create-database": "sequelize db:create",
-    "drop-database": "sequelize db:drop",
-    "migrate": "sequelize db:migrate",
-    "migrate-undo": "sequelize db:migrate:undo:all",
-    "seed": "sequelize db:seed:all",
-    "seed-undo": "sequelize db:seed:undo:all"
+    "database:create": "sequelize db:create",
+    "database:drop": "sequelize db:drop",
+    "database:migrate:up": "sequelize db:migrate",
+    "database:migrate:down": "sequelize db:migrate:undo:all",
+    "database:seed:up": "sequelize db:seed:all",
+    "database:seed:down": "sequelize db:seed:undo:all"
   },
   "husky": {
     "hooks": {
