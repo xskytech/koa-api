@@ -49,7 +49,7 @@ npm run lint
 **Fix lint issues**
 
 ```bash
-npm run lint-fix
+npm run lint:fix
 ```
 
 ### Validate
@@ -65,37 +65,37 @@ npm run validate
 **Create DB**
 
 ```bash
-npm run create-database
+npm run database:create
 ```
 
 **Run migrations**
 
 ```bash
-npm run migrate
+npm run database:migrate:up
 ```
 
 **Undo migrations**
 
 ```bash
-npm run migrate-undo
+npm run database:migrate:down
 ```
 
 **Run seeds**
 
 ```bash
-npm run seed
+npm run database:seed:up
 ```
 
 **Undo seeds**
 
 ```bash
-npm run seed-undo
+npm run database:seed:down
 ```
 
 **Drop DB**
 
 ```bash
-npm run drop-database
+npm run database:drop
 ```
 
 ### Run
@@ -103,7 +103,7 @@ npm run drop-database
 **Run in development**
 
 ```bash
-npm run dev
+npm run develop
 ```
 
 **Run in production**
