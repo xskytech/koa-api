@@ -5,7 +5,7 @@ const respond = require('koa-respond');
 const log4js = require('log4js');
 
 const errorHandler = require('./api/middlewares/error-handler');
-const v1Routes = require('./api/routes/v1');
+const routes = require('./api/routes');
 const whitelist = require('./utils/helpers/whitelist');
 const config = require('./config');
 
@@ -24,6 +24,6 @@ app.use(respond({
   statusMethods: { accepted: 202, conflict: 409, unprocessableEntity: 422 },
 }));
 app.use(errorHandler());
-app.use(v1Routes.routes());
+app.use(routes.routes());
 
 app.listen(port, logger.info(`Server is running on port ${port}`));

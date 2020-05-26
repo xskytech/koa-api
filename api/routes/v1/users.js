@@ -13,7 +13,7 @@ router.post('/', UsersController.create);
 router.post('/sign-in', UsersController.signIn);
 router.post('/social-auth', UsersController.socialAuth);
 
-router.patch('/:id', authorization, UsersController.update);
+router.put('/:id', authorization, UsersController.update);
 
 router.delete('/:id', authorization, UsersController.delete);
 
