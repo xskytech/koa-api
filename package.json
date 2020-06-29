@@ -59,12 +59,12 @@
     "koa2-swagger-ui": "^3.0.0",
     "lodash": "^4.17.14",
     "log4js": "^4.3.1",
-    "pg": "^7.11.0",
+    "pg": "^8.2.1",
     "pg-error-codes": "^1.1.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "sequelize": "^6.0.0",
-    "sequelize-cli": "^5.5.0"
+    "sequelize": "^6.2.3",
+    "sequelize-cli": "^6.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",

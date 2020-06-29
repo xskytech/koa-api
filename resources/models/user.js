@@ -57,13 +57,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: Statuses.PENDING,
     },
   }, {
-    defaultScope: {
-      include: [{
-        model: sequelize.import('./usersocial'),
-        as: 'socials',
-      }],
-    },
-
     hooks: {
       beforeSave: async (model) => {
         if (model.isNewRecord || model.changed('password')) {
@@ -82,6 +75,15 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Token, { as: 'tokens', foreignKey: 'userId' });
     User.hasMany(models.UserSocial, { as: 'socials', foreignKey: 'userId' });
+  };
+
+  User.loadScopes = (models) => {
+    User.addScope('defaultScope', {
+      include: [{
+        model: models.UserSocial,
+        as: 'socials',
+      }],
+    });
   };
 
   User.prototype.toJSON = function () {
