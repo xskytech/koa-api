@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: koa-api-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+  api:
+    build: .
+    restart: always
+    container_name: koa-api
+    ports:
+      - ${PORT}:${PORT}
+    links:
+      - postgres
