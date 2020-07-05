@@ -1,10 +1,9 @@
 const request = require('request-promise-native');
 
+const { social: { facebook, google } } = require('../config');
 const Statuses = require('../constants/statuses');
 const Socials = require('../constants/socials');
-const { social: { facebook, google } } = require('../config');
-
-const capitalize = require('./helpers/capitalize');
+const capitalize = require('../utils/capitalize');
 
 class Social {
   static async getData({ type, code }) {

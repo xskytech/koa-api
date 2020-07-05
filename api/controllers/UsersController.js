@@ -7,7 +7,7 @@ const {
   sequelize, User, UserSocial, Token,
 } = require('../../resources/models');
 const Mailer = require('../../services/Mailer');
-const Social = require('../../utils/Social');
+const Social = require('../../services/Social');
 const ErrorMessages = require('../../constants/errors');
 const Statuses = require('../../constants/statuses');
 const Tokens = require('../../constants/tokens');

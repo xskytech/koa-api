@@ -5,8 +5,8 @@ const respond = require('koa-respond');
 const log4js = require('log4js');
 
 const errorHandler = require('./api/middlewares/error-handler');
+const whitelist = require('./api/middlewares/whitelist');
 const routes = require('./api/routes');
-const whitelist = require('./utils/helpers/whitelist');
 const config = require('./config');
 
 const app = new Koa();
