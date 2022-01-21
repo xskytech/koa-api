@@ -58,7 +58,7 @@
     "koa-router": "^7.4.0",
     "koa2-swagger-ui": "^3.0.0",
     "lodash": "^4.17.14",
-    "log4js": "^4.3.1",
+    "log4js": "^6.4.0",
     "pg": "^8.2.1",
     "pg-error-codes": "^1.1.0",
     "request": "^2.88.0",
